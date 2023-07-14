@@ -36,4 +36,11 @@ public class EmployeeController {
         employeeService.removeEmployee(employeeId);
         return ResponseEntity.ok("Employee removed successfully");
     }
+
+    @GetMapping("/get-employee-details/{employeeId}")
+    public ResponseEntity getEmployeeDetails(@PathVariable int employeeId){
+        log.info("getEmployeeDetails incoming request for employeeId {}",employeeId);
+        EmployeeBaseDetails employeeBaseDetails = employeeService.getEmployeeDetails(employeeId);
+        return ResponseEntity.ok(employeeBaseDetails);
+    }
 }

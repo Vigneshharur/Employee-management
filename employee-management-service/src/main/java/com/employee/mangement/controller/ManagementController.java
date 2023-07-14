@@ -25,14 +25,14 @@ public class ManagementController {
         return ResponseEntity.ok("Department details Successfully saved");
     }
 
-    @GetMapping("/hr/add/{employeeId}")
+    @PostMapping("/hr/add/{employeeId}")
     public String addNewHR(@PathVariable int employeeId){
         log.info("Request to add new HR in ManagementController");
         managementService.addNewHR(employeeId);
         return "HR added Successfully";
     }
 
-    @GetMapping("/rm/add/{employeeId}")
+    @PostMapping("/rm/add/{employeeId}")
     public String addNewReportingManager(@PathVariable int employeeId){
         log.info("Request to add new Reporting Manager in ManagementController");
         managementService.addNewReportingManagers(employeeId);

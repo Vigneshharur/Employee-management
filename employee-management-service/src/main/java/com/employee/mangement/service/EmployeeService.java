@@ -11,12 +11,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -55,7 +54,7 @@ public class EmployeeService {
     ReportingManagersRepository reportingManagersRepository;
 
     @SneakyThrows
-    public EmployeeMainDetails createNewEmployeeId(EmployeeMainDetails employeeMainDetails){
+    public EmployeeMainDetails createNewEmployeeId(@NotNull EmployeeMainDetails employeeMainDetails){
         int employeeId = employeeMainDetails.getEmployeeId();
         if (employeeId == 0) {
             Integer lastEmployeeId = employeeMainRepository.getLastEmployeeId();
@@ -74,7 +73,7 @@ public class EmployeeService {
     }
 
     @SneakyThrows
-    public void saveEmployeeDetails(EmployeeBaseDetails employeeBaseDetails){
+    public void saveEmployeeDetails(@NotNull EmployeeBaseDetails employeeBaseDetails){
         int employeeId = employeeBaseDetails.getEmployeeId();
 
         EmployeeMainEntity employeeMainEntity = employeeMainRepository.findFirstByEmployeeId(employeeId);
@@ -97,7 +96,7 @@ public class EmployeeService {
         }
     }
 
-    private void saveEducationDetails(EducationDetails educationDetails, int employeeId) throws JsonProcessingException {
+    private void saveEducationDetails(@NotNull EducationDetails educationDetails, int employeeId) throws JsonProcessingException {
         Map<String,Map<String,String>> primaryEducation = educationDetails.getPrimaryEducation();
         if(primaryEducation.size() < 3){
             throw new ServiceException("Employee doesn't have required education level");
@@ -113,6 +112,7 @@ public class EmployeeService {
                         .dataValue(dataType.getValue())
                         .build();
                 educationDetailsRepository.save(educationDetailsEntity);
+
             }
         }
 
@@ -155,7 +155,7 @@ public class EmployeeService {
         log.info("Employee removed successfully");
     }
 
-    private void updateTotalEmployees(EmployeeBaseEntity employeeBaseEntity, int changeValue){
+    private void updateTotalEmployees(@NotNull EmployeeBaseEntity employeeBaseEntity, int changeValue){
 
         jobTitlesRepository.updateTotalEmployees(employeeBaseEntity.getRoleId(), changeValue);
         departmentsRepository.updateTotalEmployees(employeeBaseEntity.getDepartmentId(), changeValue);

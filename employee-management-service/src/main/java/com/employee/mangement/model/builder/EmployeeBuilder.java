@@ -23,7 +23,4 @@ public class EmployeeBuilder {
         return Period.between(dateOfBirth.toLocalDate() , LocalDate.now()).getYears();
     }
 
-    public void buildEducationDetails(List<EducationDetailsEntity> educationDetailsEntities){
-
-    }
 }

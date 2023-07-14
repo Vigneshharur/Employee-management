@@ -16,6 +16,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -164,4 +166,54 @@ public class EmployeeService {
         log.info("Total employee values updated successfully");
     }
 
+    @SneakyThrows
+    public EmployeeBaseDetails getEmployeeDetails(int employeeId){
+        EmployeeBaseEntity employeeBaseEntity = employeeBaseRepository.findFirstByEmployeeId(employeeId);
+        if(employeeBaseEntity == null){
+            throw new ServiceException("Invalid EmployeeId");
+        }
+        ModelMapper modelMapper = new ModelMapper();
+        EmployeeBaseDetails employeeBaseDetails = modelMapper.map(employeeBaseEntity,EmployeeBaseDetails.class);
+        getEducationDetails(employeeBaseDetails);
+        return employeeBaseDetails;
+    }
+
+    @SneakyThrows
+    private void getEducationDetails(EmployeeBaseDetails employeeBaseDetails) {
+        List<EducationDetailsEntity> educationDetailsEntities = educationDetailsRepository.findAllByEmployeeId(employeeBaseDetails.getEmployeeId());
+        Map<String,Map<String,String>> primaryEducation = new HashMap<>(3);
+        Map<String,String> classX = new HashMap<>(4,1.0f);
+        Map<String,String> classXII = new HashMap<>(4, 1.0f);
+        Map<String,String> bachelorCollege = new HashMap<>(4, 1.0f);
+        Map<String,Map<String,String>> higherEducation = null;
+        for(EducationDetailsEntity educationDetails : educationDetailsEntities){
+            String educationLevel = educationDetails.getEducationLevel();
+            switch (educationLevel) {
+                case "CLASS-X" -> {
+                    classX.put(educationDetails.getDataType(), educationDetails.getDataValue());
+                    if (classX.size() == 4) {
+                        primaryEducation.put(educationLevel, classX);
+                    }
+                }
+                case "CLASS-XII" -> {
+                    classXII.put(educationDetails.getDataType(), educationDetails.getDataValue());
+                    if (classX.size() == 4) {
+                        primaryEducation.put(educationLevel, classXII);
+                    }
+                }
+                case "BCLR-CLG" -> {
+                    bachelorCollege.put(educationDetails.getDataType(), educationDetails.getDataValue());
+                    if (classX.size() == 4) {
+                        primaryEducation.put(educationLevel, bachelorCollege);
+                    }
+                }
+                default ->
+                        higherEducation = new ObjectMapper().readValue(educationDetails.getDataValue(), Map.class);
+            }
+        }
+        EducationDetails educationDetails = EducationDetails.builder()
+                .primaryEducation(primaryEducation)
+                .higherEducation(higherEducation).build();
+        employeeBaseDetails.setEducationDetails(educationDetails);
+    }
 }

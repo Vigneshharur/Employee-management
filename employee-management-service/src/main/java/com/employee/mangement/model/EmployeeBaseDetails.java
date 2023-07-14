@@ -13,6 +13,12 @@ public class EmployeeBaseDetails {
 
     private int employeeId;
 
+    private String firstName;
+
+    private String middleName;
+
+    private String lastName;
+
     private Date dateOfBirth;
 
     private int age;

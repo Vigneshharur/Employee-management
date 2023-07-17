@@ -36,12 +36,19 @@ public class EmployeeControllerTest {
     @Test
     public void saveEmployeeDetailsTest(){
         EmployeeBaseDetails employeeBaseDetails = EmployeeBaseDetails.builder().build();
-        employeeController.saveEmployeeDetails(employeeBaseDetails);
+        Assertions.assertEquals("Employee added successfully",employeeController.saveEmployeeDetails(employeeBaseDetails).getBody());
         Mockito.verify(employeeService,Mockito.times(1)).saveEmployeeDetails(employeeBaseDetails);
     }
 
     @Test
     public void deleteEmployeeTest(){
         Assertions.assertEquals("Employee removed successfully",employeeController.deleteEmployee(EMPLOYEE_ID).getBody());
+    }
+
+    @Test
+    public void getEmployeeDetailsTest(){
+        EmployeeBaseDetails employeeBaseDetails = EmployeeBaseDetails.builder().build();
+        Mockito.when(employeeService.getEmployeeDetails(EMPLOYEE_ID)).thenReturn(employeeBaseDetails);
+        Assertions.assertEquals(employeeBaseDetails,employeeController.getEmployeeDetails(EMPLOYEE_ID).getBody());
     }
 }

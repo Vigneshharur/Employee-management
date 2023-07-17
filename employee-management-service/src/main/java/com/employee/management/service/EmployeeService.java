@@ -131,13 +131,18 @@ public class EmployeeService {
 
     public void removeEmployee(int employeeId){
         EmployeeBaseEntity employeeBaseEntity = employeeBaseRepository.findFirstByEmployeeId(employeeId);
-        HRManagersEntity hrManagersEntity = hrManagersRepository.findFirstByEmployeeId(employeeId);
-        ReportingManagersEntity reportingManagersEntity = reportingManagersRepository.findFirstByEmployeeId(employeeId);
         EmployeeMainEntity employeeMainEntity = employeeMainRepository.findFirstByEmployeeId(employeeId);
         if(employeeBaseEntity == null){
+            if(employeeMainEntity == null )
+            {
+                throw new ServiceException("No employee present with this id");
+            }
             employeeMainRepository.deleteById(employeeId);
             return;
         }
+
+        HRManagersEntity hrManagersEntity = hrManagersRepository.findFirstByEmployeeId(employeeId);
+        ReportingManagersEntity reportingManagersEntity = reportingManagersRepository.findFirstByEmployeeId(employeeId);
         updateTotalEmployees(employeeBaseEntity, -1);
 
         try {

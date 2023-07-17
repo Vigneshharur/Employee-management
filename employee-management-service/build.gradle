@@ -63,7 +63,9 @@ jacocoTestReport {
 	afterEvaluate {
 		classDirectories.setFrom(files(classDirectories.files.collect {
 			fileTree(dir: it, exclude: [
-					"com/americanfirstfinance/application/history/model/**"
+					"com/employee/management/exceptions/**",
+					"com/employee/management/model/**",
+					"com/employee/management/repository/**"
 			])
 		}))
 	}

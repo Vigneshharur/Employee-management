@@ -134,6 +134,10 @@ public class EmployeeService {
         HRManagersEntity hrManagersEntity = hrManagersRepository.findFirstByEmployeeId(employeeId);
         ReportingManagersEntity reportingManagersEntity = reportingManagersRepository.findFirstByEmployeeId(employeeId);
         EmployeeMainEntity employeeMainEntity = employeeMainRepository.findFirstByEmployeeId(employeeId);
+        if(employeeBaseEntity == null){
+            employeeMainRepository.deleteById(employeeId);
+            return;
+        }
         updateTotalEmployees(employeeBaseEntity, -1);
 
         try {

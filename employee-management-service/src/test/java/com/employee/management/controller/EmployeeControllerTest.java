@@ -1,5 +1,6 @@
 package com.employee.management.controller;
 
+import com.employee.management.model.EmployeeBaseDetails;
 import com.employee.management.model.EmployeeMainDetails;
 import com.employee.management.service.EmployeeService;
 import org.junit.jupiter.api.Assertions;
@@ -17,6 +18,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 @TestPropertySource({ "classpath:/application.properties" })
 public class EmployeeControllerTest {
 
+    private final int EMPLOYEE_ID = 1;
+
     @Autowired
     EmployeeController employeeController;
 
@@ -30,4 +33,15 @@ public class EmployeeControllerTest {
         Assertions.assertEquals(employeeMainDetails,employeeController.createNewEmployee(employeeMainDetails).getBody());
     }
 
+    @Test
+    public void saveEmployeeDetailsTest(){
+        EmployeeBaseDetails employeeBaseDetails = EmployeeBaseDetails.builder().build();
+        employeeController.saveEmployeeDetails(employeeBaseDetails);
+        Mockito.verify(employeeService,Mockito.times(1)).saveEmployeeDetails(employeeBaseDetails);
+    }
+
+    @Test
+    public void deleteEmployeeTest(){
+        Assertions.assertEquals("Employee removed successfully",employeeController.deleteEmployee(EMPLOYEE_ID).getBody());
+    }
 }

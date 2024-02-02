@@ -1,9 +1,16 @@
+create table employee_main(
+	employee_id INT primary key GENERATED ALWAYS AS IDENTITY,
+   	first_name varchar(100) not null,
+	middle_name varchar(100),
+	last_name varchar(100)
+);
+
 create table hr_managers(
 	employee_id int primary key,
 	first_name varchar(100) not null,
 	middle_name varchar(100),
 	last_name varchar(100) not null,
-	constraint hr_fk1 foreign key(employee_id) references employee_main(employee_id),
+	constraint hr_fk1 foreign key(employee_id) references employee_main(employee_id)
 );
 
 create table reporting_managers(
@@ -22,12 +29,7 @@ Create table departments(
 	total_employees int 
 );
 
-create table employee_main(
-	employee_id INT primary key GENERATED ALWAYS AS IDENTITY,
-   	first_name varchar(100) not null,
-	middle_name varchar(100),
-	last_name varchar(100)
-);
+
 
 create table locations(
 	location_id serial primary key,

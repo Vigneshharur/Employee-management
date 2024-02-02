@@ -1,7 +1,7 @@
-package com.employee.management.model.builder;
+package com.employee.management.builder;
 
-import com.employee.management.repository.persistence.EmployeeBaseEntity;
-import com.employee.management.repository.persistence.EmployeeMainEntity;
+import com.employee.management.entity.EmployeeBaseEntity;
+import com.employee.management.entity.EmployeeMainEntity;
 import org.springframework.stereotype.Component;
 
 import java.sql.Date;

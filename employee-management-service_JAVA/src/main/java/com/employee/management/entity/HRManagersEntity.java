@@ -1,4 +1,4 @@
-package com.employee.management.repository.persistence;
+package com.employee.management.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -10,11 +10,11 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Data
 @ToString
+@Data
 @Entity
-@Table(name = "employee_main")
-public class EmployeeMainEntity implements Serializable {
+@Table(name = "hr_managers")
+public class HRManagersEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id

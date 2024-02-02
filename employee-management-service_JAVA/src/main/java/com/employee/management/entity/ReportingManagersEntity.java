@@ -1,4 +1,4 @@
-package com.employee.management.repository.persistence;
+package com.employee.management.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

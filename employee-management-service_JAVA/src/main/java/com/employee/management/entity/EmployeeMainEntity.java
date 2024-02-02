@@ -1,8 +1,6 @@
-package com.employee.management.repository.persistence;
+package com.employee.management.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
@@ -10,14 +8,15 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString
 @Data
+@ToString
 @Entity
-@Table(name = "hr_managers")
-public class HRManagersEntity implements Serializable {
+@Table(name = "employee_main")
+public class EmployeeMainEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int employeeId;
 
     private String firstName;

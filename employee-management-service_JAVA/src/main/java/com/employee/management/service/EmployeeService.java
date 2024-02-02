@@ -1,12 +1,11 @@
 package com.employee.management.service;
 
+import com.employee.management.entity.*;
 import com.employee.management.exceptions.ServiceException;
 import com.employee.management.model.EducationDetails;
 import com.employee.management.model.EmployeeBaseDetails;
-import com.employee.management.model.EmployeeMainDetails;
-import com.employee.management.model.builder.EmployeeBuilder;
+import com.employee.management.builder.EmployeeBuilder;
 import com.employee.management.repository.*;
-import com.employee.management.repository.persistence.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
@@ -56,22 +55,10 @@ public class EmployeeService {
     ReportingManagersRepository reportingManagersRepository;
 
     @SneakyThrows
-    public EmployeeMainDetails createNewEmployeeId(@NotNull EmployeeMainDetails employeeMainDetails){
-        int employeeId = employeeMainDetails.getEmployeeId();
-        if (employeeId == 0) {
-            Integer lastEmployeeId = employeeMainRepository.getLastEmployeeId();
-            employeeId = (lastEmployeeId == null ? 0 : lastEmployeeId) + 1;
-        }
-        EmployeeMainEntity employeeMainEntity = EmployeeMainEntity.builder()
-                .employeeId(employeeId)
-                .firstName(employeeMainDetails.getFirstName())
-                .middleName(employeeMainDetails.getMiddleName())
-                .lastName(employeeMainDetails.getLastName())
-                .build();
-        employeeMainDetails.setEmployeeId(employeeId);
-        employeeMainRepository.save(employeeMainEntity);
+    public EmployeeMainEntity createNewEmployeeId(@NotNull EmployeeMainEntity employee){
+        employeeMainRepository.save(employee);
         log.info("EmployeeService createNewEmployeeId completed");
-        return employeeMainDetails;
+        return employee;
     }
 
     @SneakyThrows

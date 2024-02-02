@@ -1,7 +1,7 @@
 package com.employee.management.controller;
 
+import com.employee.management.entity.EmployeeMainEntity;
 import com.employee.management.model.EmployeeBaseDetails;
-import com.employee.management.model.EmployeeMainDetails;
 import com.employee.management.service.EmployeeService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,7 @@ public class EmployeeControllerTest {
 
     @Test
     public void createNewEmployeeTest(){
-        EmployeeMainDetails employeeMainDetails = EmployeeMainDetails.builder().build();
+        EmployeeMainEntity employeeMainDetails = EmployeeMainEntity.builder().build();
         Mockito.when(employeeService.createNewEmployeeId(employeeMainDetails)).thenReturn(employeeMainDetails);
         Assertions.assertEquals(employeeMainDetails,employeeController.createNewEmployee(employeeMainDetails).getBody());
     }

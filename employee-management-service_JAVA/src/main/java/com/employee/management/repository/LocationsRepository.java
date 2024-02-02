@@ -1,6 +1,6 @@
 package com.employee.management.repository;
 
-import com.employee.management.repository.persistence.LocationsEntity;
+import com.employee.management.entity.LocationsEntity;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

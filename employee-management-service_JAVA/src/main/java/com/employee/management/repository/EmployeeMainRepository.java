@@ -1,6 +1,6 @@
 package com.employee.management.repository;
 
-import com.employee.management.repository.persistence.EmployeeMainEntity;
+import com.employee.management.entity.EmployeeMainEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

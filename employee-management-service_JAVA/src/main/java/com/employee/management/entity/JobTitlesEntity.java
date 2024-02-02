@@ -1,4 +1,4 @@
-package com.employee.management.repository.persistence;
+package com.employee.management.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,24 +8,21 @@ import lombok.*;
 
 import java.io.Serializable;
 
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @ToString
 @Data
-@Entity
-@Table(name = "projects")
-public class ProjectsEntity implements Serializable {
-
+@Table(name = "job_titles")
+public class JobTitlesEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name = "project_id")
-    private int projectId;
+    @Column(name = "job_id")
+    private int jobId;
 
-    private String client;
-
-    private String projectTitle;
+    private String jobTitle;
 
     private int noOfEmployees;
 }

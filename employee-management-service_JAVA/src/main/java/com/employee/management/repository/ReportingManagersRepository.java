@@ -1,6 +1,6 @@
 package com.employee.management.repository;
 
-import com.employee.management.repository.persistence.ReportingManagersEntity;
+import com.employee.management.entity.ReportingManagersEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,12 +1,12 @@
 package com.employee.management.service;
 
+import com.employee.management.entity.*;
 import com.employee.management.exceptions.ServiceException;
 import com.employee.management.model.DepartmentsDetails;
 import com.employee.management.model.JobDetails;
 import com.employee.management.model.LocationDetails;
 import com.employee.management.model.ProjectDetails;
 import com.employee.management.repository.*;
-import com.employee.management.repository.persistence.*;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -3,8 +3,10 @@ package com.employee.management.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,6 +16,7 @@ import java.sql.Date;
 @Entity
 @Table(name = "EMPLOYEE_BASE")
 public class EmployeeBaseEntity implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -83,8 +86,8 @@ public class EmployeeBaseEntity implements Serializable {
     @Column(name = "pan_card")
     private String panNumber;
 
-    @Column(name = "total_experience")
-    private double totalExperience;
+    @Column(name = "previous_experience")
+    private double previousExperience;
 
     private Date joinedDate;
 
@@ -96,5 +99,9 @@ public class EmployeeBaseEntity implements Serializable {
 
     @Column(name = "emergency_contact")
     private Long emergencyContact;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "employeeId")
+    private List<EducationDetailsEntity> educationDetails;
 
 }

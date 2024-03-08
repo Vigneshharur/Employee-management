@@ -1,11 +1,11 @@
 package com.employee.management.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,6 +15,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "reporting_managers")
 public class ReportingManagersEntity implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -25,4 +26,8 @@ public class ReportingManagersEntity implements Serializable {
     private String middleName;
 
     private String lastName;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "reporting_to")
+    private List<EmployeeBaseEntity> employees;
 }

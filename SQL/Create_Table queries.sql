@@ -25,8 +25,7 @@ create table reporting_managers(
 Create table departments(
 	dpt_id serial primary key,
 	dpt_code char(2),
-	dpt_name varchar(50) not null,
-	total_employees int 
+	dpt_name varchar(50) not null
 );
 
 
@@ -53,15 +52,13 @@ create table education_details(
 create table projects(
 	project_id serial primary key,
 	client varchar(10) not null,
-	project_title varchar(200) not null,
-	no_of_employees int default 0
+	project_title varchar(200) not null
 );
 
 
 create table job_titles(
 	job_id serial primary key,
-	job_title varchar(100) not null,
-	no_of_employees int default 0
+	job_title varchar(100) not null
 );
 
 create table employee_base(
@@ -87,7 +84,7 @@ create table employee_base(
 	company_email varchar(200) not null,
 	aadhar_number varchar(15) not null check(aadhar_number ~ '^[0-9]*$'),
 	pan_card varchar(10) not null check(aadhar_number ~ '^[A_Z0-9]*$'),
-	total_experience float not null,
+	previous_experience float not null,
 	joined_date date not null,
 	added_by int,
 	reporting_to int,

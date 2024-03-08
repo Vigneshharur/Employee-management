@@ -1,0 +1,44 @@
+{
+    "employeeId": 3,
+    "dateOfBirth": "1990-01-01",
+    "age": 32,
+    "gender": "M",
+    "isMarried": true,
+    "citizenship": "USA",
+    "fatherName": "John Doe Sr.",
+    "motherName": "Jane Doe",
+    "bloodGroup": "O+",
+    "isActive": true,
+    "mobileNumber": 1234567890,
+    "personalEmail": "john.doe@example.com",
+    "companyEmail": "john.smith@example.com",
+    "aadharNumber": "123456789012",
+    "panNumber": "ABCDE1234F",
+    "totalExperience": 5.5,
+    "joinedDate": "2020-01-01",
+    "addedBy": 789,
+    "reportingTo": 101,
+    "emergencyContact": 9876543210,
+    "educationDetails": {
+        "primaryEducation":{
+            "CLASS-X":{
+                "INSTITUTE_NAME":"Government High School, Kelapparai",
+                "PERCENTAGE":"95.20",
+                "TOWN/CITY": "Kelapparai",
+                "STATE": "Tamil Nadu"
+            },
+            "CLASS-XII":{
+                "INSTITUTE_NAME":"Jayam Vidhayalaya School, Harur",
+                "PERCENTAGE":"95.83",
+                "TOWN/CITY": "Harur",
+                "STATE": "Tamil Nadu"
+            },
+            "BCLR-CLG":{
+                "INSTITUTE_NAME":"College Of Engineering Guindy, Chennai",
+                "PERCENTAGE":"95.20",
+                "TOWN/CITY": "Chennai",
+                "STATE": "Tamil Nadu"
+            }
+        }
+    }
+}

@@ -1,7 +1,9 @@
 package com.employee.management.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 @AllArgsConstructor
@@ -9,7 +11,7 @@ import java.sql.Date;
 @Builder
 @Data
 @ToString
-public class EmployeeBaseDetails {
+public class EmployeeBaseDetails implements Serializable {
 
     private int employeeId;
 
@@ -25,6 +27,7 @@ public class EmployeeBaseDetails {
 
     private String gender;
 
+    @JsonProperty
     private boolean isMarried;
 
     private String citizenship;
@@ -43,6 +46,7 @@ public class EmployeeBaseDetails {
 
     private int projectId;
 
+    @JsonProperty
     private boolean isActive;
 
     private Long mobileNumber;
@@ -55,7 +59,7 @@ public class EmployeeBaseDetails {
 
     private String panNumber;
 
-    private double totalExperience;
+    private double previousExperience;
 
     private Date joinedDate;
 

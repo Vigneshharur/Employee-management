@@ -1,12 +1,11 @@
 package com.employee.management.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,9 +15,11 @@ import java.io.Serializable;
 @Entity
 @Table(name = "locations")
 public class LocationsEntity implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int locationId;
 
     private String city;
@@ -33,6 +34,7 @@ public class LocationsEntity implements Serializable {
 
     private String address2;
 
-    @Column(name = "no_of_employees")
-    private int noOfEmployees;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "location_id")
+    private List<EmployeeBaseEntity> employees;
 }

@@ -3,6 +3,7 @@ package com.employee.management.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 @AllArgsConstructor
@@ -13,6 +14,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "employee_main")
 public class EmployeeMainEntity implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -24,4 +26,8 @@ public class EmployeeMainEntity implements Serializable {
     private String middleName;
 
     private String lastName;
+
+    @OneToOne( cascade = CascadeType.ALL)
+    @JoinColumn(name = "employee_id")
+    private EmployeeBaseEntity employeeBase;
 }

@@ -15,10 +15,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.sql.Date;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -69,39 +67,44 @@ public class EmployeeService {
         if(Optional.ofNullable(employeeMainEntity).isEmpty()){
             throw new ServiceException("Invalid EmployeeId");
         }
-        int age = employeeBuilder.calculateAge(employeeBaseDetails.getDateOfBirth());
-        employeeBaseDetails.setAge(age);
+        Date dateOfBirth = employeeBaseDetails.getDateOfBirth();
+        if(Optional.ofNullable(dateOfBirth).isPresent()){
+            int age = employeeBuilder.calculateAge(dateOfBirth);
+            employeeBaseDetails.setAge(age);
+        }
 
         ModelMapper modelMapper = new ModelMapper();
         EmployeeBaseEntity employeeBaseEntity = modelMapper.map(employeeBaseDetails,EmployeeBaseEntity.class);
 
         employeeBuilder.setEmployeeName(employeeBaseEntity,employeeMainEntity);
         Integer employeePresent = employeeBaseRepository.isEmployeePresent(employeeId);
-
-        saveEducationDetails(employeeBaseDetails.getEducationDetails(), employeeId);
-        employeeBaseRepository.save(employeeBaseEntity);
-        if(employeePresent == null || employeePresent != employeeId){
-            updateTotalEmployees(employeeBaseEntity, 1);
+        EducationDetails educationDetails = employeeBaseDetails.getEducationDetails();
+        if(Optional.ofNullable(dateOfBirth).isPresent()) {
+            employeeBaseEntity.setEducationDetails(saveEducationDetails(educationDetails, employeeId));
         }
+
+        employeeBaseRepository.saveAndFlush(employeeBaseEntity);
+//        if(employeePresent == null || employeePresent != employeeId){
+//            updateTotalEmployees(employeeBaseEntity, 1);
+//        }
     }
 
-    private void saveEducationDetails(@NotNull EducationDetails educationDetails, int employeeId) throws JsonProcessingException {
+    private List<EducationDetailsEntity> saveEducationDetails(@NotNull EducationDetails educationDetails, int employeeId) throws JsonProcessingException {
         Map<String,Map<String,String>> primaryEducation = educationDetails.getPrimaryEducation();
         if(primaryEducation.size() < 3){
             throw new ServiceException("Employee doesn't have required education level");
         }
-
+        List<EducationDetailsEntity> educationDetailsEntities = new ArrayList<>();
         for(Map.Entry<String,Map<String,String>> education : primaryEducation.entrySet()){
             String educationLevel = education.getKey();
-            for(Map.Entry<String,String> dataType : education.getValue().entrySet()){
+            for(Map.Entry<String,String> dataType : education.getValue().entrySet()) {
                 EducationDetailsEntity educationDetailsEntity = EducationDetailsEntity.builder()
                         .employeeId(employeeId)
                         .educationLevel(educationLevel)
                         .dataType(dataType.getKey())
                         .dataValue(dataType.getValue())
                         .build();
-                educationDetailsRepository.save(educationDetailsEntity);
-
+                educationDetailsEntities.add(educationDetailsEntity);
             }
         }
 
@@ -113,7 +116,9 @@ public class EmployeeService {
                 .dataType("OTHERS")
                 .dataValue(json)
                 .build();
-        educationDetailsRepository.save(educationDetailsEntity);
+        educationDetailsEntities.add(educationDetailsEntity);
+
+        return educationDetailsEntities;
     }
 
     public void removeEmployee(int employeeId){
@@ -168,6 +173,7 @@ public class EmployeeService {
         if(employeeBaseEntity == null){
             throw new ServiceException("Invalid EmployeeId");
         }
+        log.info("-------------------\n" + employeeBaseEntity.getEducationDetails());
         ModelMapper modelMapper = new ModelMapper();
         EmployeeBaseDetails employeeBaseDetails = modelMapper.map(employeeBaseEntity,EmployeeBaseDetails.class);
         getEducationDetails(employeeBaseDetails);

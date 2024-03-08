@@ -6,6 +6,7 @@ import jakarta.persistence.IdClass;
 import jakarta.persistence.Table;
 import lombok.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 @AllArgsConstructor
@@ -17,6 +18,7 @@ import java.io.Serializable;
 @Table(name = "education_details")
 @IdClass(EducationDetailsPk.class)
 public class EducationDetailsEntity implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id

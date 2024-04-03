@@ -173,7 +173,6 @@ public class EmployeeService {
         if(employeeBaseEntity == null){
             throw new ServiceException("Invalid EmployeeId");
         }
-        log.info("-------------------\n" + employeeBaseEntity.getEducationDetails());
         ModelMapper modelMapper = new ModelMapper();
         EmployeeBaseDetails employeeBaseDetails = modelMapper.map(employeeBaseEntity,EmployeeBaseDetails.class);
         getEducationDetails(employeeBaseDetails);

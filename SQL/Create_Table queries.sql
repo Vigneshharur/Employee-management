@@ -72,7 +72,7 @@ create table employee_base(
 	personal_email varchar(200) not null,
 	company_email varchar(200) not null,
 	aadhar_number varchar(15) not null check(aadhar_number regexp '^[0-9]*$'),
-	pan_card varchar(10) not null check(pan_card regexp '^[A_Z0-9]*$'),
+	pan_card varchar(10) not null check(pan_card regexp '^[A-Z0-9]*$'),
 	previous_experience int not null,
 	joined_date date not null,
     is_reporting_manager boolean not null default(false),

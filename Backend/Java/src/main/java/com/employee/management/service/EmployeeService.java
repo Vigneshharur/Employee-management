@@ -1,11 +1,15 @@
 package com.employee.management.service;
 
-import com.employee.management.entity.*;
+import com.employee.management.builder.EmployeeBuilder;
+import com.employee.management.entity.EducationDetailsEntity;
+import com.employee.management.entity.EmployeeBaseEntity;
+import com.employee.management.entity.EmployeeMainEntity;
 import com.employee.management.exceptions.ServiceException;
 import com.employee.management.model.EducationDetails;
 import com.employee.management.model.EmployeeBaseDetails;
-import com.employee.management.builder.EmployeeBuilder;
-import com.employee.management.repository.*;
+import com.employee.management.repository.EducationDetailsRepository;
+import com.employee.management.repository.EmployeeBaseRepository;
+import com.employee.management.repository.EmployeeMainRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
@@ -15,7 +19,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
 import java.util.*;
 
 @Service
@@ -32,25 +35,7 @@ public class EmployeeService {
     EmployeeBuilder employeeBuilder;
 
     @Autowired
-    JobTitlesRepository jobTitlesRepository;
-
-    @Autowired
-    DepartmentsRepository departmentsRepository;
-
-    @Autowired
-    LocationsRepository locationsRepository;
-
-    @Autowired
-    ProjectsRepository projectsRepository;
-
-    @Autowired
     EducationDetailsRepository educationDetailsRepository;
-
-    @Autowired
-    HRManagersRepository hrManagersRepository;
-
-    @Autowired
-    ReportingManagersRepository reportingManagersRepository;
 
     @SneakyThrows
     public EmployeeMainEntity createNewEmployeeId(@NotNull EmployeeMainEntity employee){
@@ -67,26 +52,17 @@ public class EmployeeService {
         if(Optional.ofNullable(employeeMainEntity).isEmpty()){
             throw new ServiceException("Invalid EmployeeId");
         }
-        Date dateOfBirth = employeeBaseDetails.getDateOfBirth();
-        if(Optional.ofNullable(dateOfBirth).isPresent()){
-            int age = employeeBuilder.calculateAge(dateOfBirth);
-            employeeBaseDetails.setAge(age);
-        }
 
         ModelMapper modelMapper = new ModelMapper();
         EmployeeBaseEntity employeeBaseEntity = modelMapper.map(employeeBaseDetails,EmployeeBaseEntity.class);
 
         employeeBuilder.setEmployeeName(employeeBaseEntity,employeeMainEntity);
-        Integer employeePresent = employeeBaseRepository.isEmployeePresent(employeeId);
         EducationDetails educationDetails = employeeBaseDetails.getEducationDetails();
-        if(Optional.ofNullable(dateOfBirth).isPresent()) {
+        if(Optional.ofNullable(educationDetails).isPresent()) {
             employeeBaseEntity.setEducationDetails(saveEducationDetails(educationDetails, employeeId));
         }
 
         employeeBaseRepository.saveAndFlush(employeeBaseEntity);
-//        if(employeePresent == null || employeePresent != employeeId){
-//            updateTotalEmployees(employeeBaseEntity, 1);
-//        }
     }
 
     private List<EducationDetailsEntity> saveEducationDetails(@NotNull EducationDetails educationDetails, int employeeId) throws JsonProcessingException {
@@ -133,38 +109,14 @@ public class EmployeeService {
             return;
         }
 
-        HRManagersEntity hrManagersEntity = hrManagersRepository.findFirstByEmployeeId(employeeId);
-        ReportingManagersEntity reportingManagersEntity = reportingManagersRepository.findFirstByEmployeeId(employeeId);
-        updateTotalEmployees(employeeBaseEntity, -1);
-
         try {
             employeeBaseRepository.deleteById(employeeId);
-            hrManagersRepository.deleteById(employeeId);
-            reportingManagersRepository.deleteById(employeeId);
             educationDetailsRepository.removeEmployeeEduDetails(employeeId);
             employeeMainRepository.deleteById(employeeId);
         }catch (Exception e) {
-            employeeMainRepository.save(employeeMainEntity);
-            if(reportingManagersEntity != null){
-                reportingManagersRepository.save(reportingManagersEntity);
-            }
-            if(hrManagersEntity != null){
-                hrManagersRepository.save(hrManagersEntity);
-            }
-            employeeBaseRepository.save(employeeBaseEntity);
-            updateTotalEmployees(employeeBaseEntity, 1);
             throw new ServiceException("Employee removal is unsuccessful due to " + e.getMessage());
         }
         log.info("Employee removed successfully");
-    }
-
-    private void updateTotalEmployees(@NotNull EmployeeBaseEntity employeeBaseEntity, int changeValue){
-
-        jobTitlesRepository.updateTotalEmployees(employeeBaseEntity.getRoleId(), changeValue);
-        departmentsRepository.updateTotalEmployees(employeeBaseEntity.getDepartmentId(), changeValue);
-        locationsRepository.updateTotalEmployees(employeeBaseEntity.getLocationId(), changeValue);
-        projectsRepository.updateTotalEmployees(employeeBaseEntity.getProjectId(), changeValue);
-        log.info("Total employee values updated successfully");
     }
 
     @SneakyThrows

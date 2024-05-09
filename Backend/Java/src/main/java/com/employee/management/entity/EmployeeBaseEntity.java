@@ -35,9 +35,6 @@ public class EmployeeBaseEntity implements Serializable {
     @Column(name = "date_of_birth")
     private Date dateOfBirth;
 
-    @Column(name = "age")
-    private int age;
-
     @Column(name = "gender")
     private String gender;
 
@@ -87,7 +84,7 @@ public class EmployeeBaseEntity implements Serializable {
     private String panNumber;
 
     @Column(name = "previous_experience")
-    private double previousExperience;
+    private int previousExperience;
 
     private Date joinedDate;
 
@@ -99,6 +96,9 @@ public class EmployeeBaseEntity implements Serializable {
 
     @Column(name = "emergency_contact")
     private Long emergencyContact;
+
+    @Column(name = "is_reporting_manager")
+    private Boolean isReportingManager;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "employeeId")

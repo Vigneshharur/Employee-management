@@ -24,8 +24,6 @@ public class ProjectsEntity implements Serializable {
     @Column(name = "project_id")
     private int projectId;
 
-    private String client;
-
     private String projectTitle;
 
     private int noOfEmployees;

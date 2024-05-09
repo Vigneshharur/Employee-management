@@ -1,43 +1,34 @@
+DROP DATABASE IF EXISTS employee_management;
+create database employee_management;
+use employee_management;
+create table roles(
+	role_id int AUTO_INCREMENT PRIMARY KEY,
+    role VARCHAR(100) NOT NULL
+);
+
 create table employee_main(
-	employee_id INT primary key GENERATED ALWAYS AS IDENTITY,
+	employee_id INT primary key AUTO_INCREMENT,
    	first_name varchar(100) not null,
 	middle_name varchar(100),
 	last_name varchar(100)
 );
 
-create table hr_managers(
-	employee_id int primary key,
-	first_name varchar(100) not null,
-	middle_name varchar(100),
-	last_name varchar(100) not null,
-	constraint hr_fk1 foreign key(employee_id) references employee_main(employee_id)
-);
-
-create table reporting_managers(
-	employee_id int primary key, 
-	first_name varchar(100) not null,
-	middle_name varchar(100),
-	last_name varchar(100) not null,
-	constraint rm_fk foreign key(employee_id) references employee_main(employee_id)
-);
-
-
 Create table departments(
-	dpt_id serial primary key,
+	dpt_id int auto_increment primary key,
 	dpt_code char(2),
 	dpt_name varchar(50) not null
 );
 
-
-
-create table locations(
-	location_id serial primary key,
-	city varchar(200) null,
-	state varchar(200) not null,
-	country varchar(200) not null,
-	zip_code varchar(6) not null check(zip_code ~ '^[0-9]*$')
+CREATE TABLE locations (
+    location_id INT AUTO_INCREMENT PRIMARY KEY,
+    address1 VARCHAR(200) NOT NULL,
+    address2 VARCHAR(200),
+    city VARCHAR(200) NOT NULL,
+    state VARCHAR(200) NOT NULL,
+    country VARCHAR(200) NOT NULL,
+    zip_code VARCHAR(6) NOT NULL,
+    CONSTRAINT check_zip_code CHECK (zip_code REGEXP '^[0-9]*$')
 );
-
 
 create table education_details(
 	employee_id int,
@@ -50,14 +41,13 @@ create table education_details(
 
 
 create table projects(
-	project_id serial primary key,
-	client varchar(10) not null,
+	project_id int auto_increment primary key,
 	project_title varchar(200) not null
 );
 
 
 create table job_titles(
-	job_id serial primary key,
+	job_id int auto_increment primary key,
 	job_title varchar(100) not null
 );
 
@@ -67,37 +57,50 @@ create table employee_base(
 	middle_name varchar(100) not null,
 	last_name varchar(100) not null not null,
 	date_of_birth date not null,
-	age int check(age>=21),
-	gender char(1) check(gender in ('M','F')),
+	gender char(10) check(gender in ('Male','Female', 'Other')),
 	marital_status boolean not null,
 	father_name varchar(200) not null,
 	mother_name varchar(200) not null,
 	citizenship varchar(30) not null,
 	blood_group varchar(5) not null,
-	department_id int,
-	employee_role int,
-	project int,
-	location_id int,
+	department_id int not null,
+	employee_role int not null,
+	project int not null,
+	location_id int not null,
 	status boolean not null,
-	mobile_number varchar(10) not null check(mobile_number ~ '^[0-9]*$'),
+	mobile_number varchar(10) not null check(mobile_number regexp '^[0-9]*$'),
 	personal_email varchar(200) not null,
 	company_email varchar(200) not null,
-	aadhar_number varchar(15) not null check(aadhar_number ~ '^[0-9]*$'),
-	pan_card varchar(10) not null check(aadhar_number ~ '^[A_Z0-9]*$'),
-	previous_experience float not null,
+	aadhar_number varchar(15) not null check(aadhar_number regexp '^[0-9]*$'),
+	pan_card varchar(10) not null check(pan_card regexp '^[A_Z0-9]*$'),
+	previous_experience int not null,
 	joined_date date not null,
+    is_reporting_manager boolean not null default(false),
 	added_by int,
 	reporting_to int,
-	emergency_contact varchar(10) not null check(mobile_number ~ '^[0-9]*$'),
+	emergency_contact varchar(10) not null check(emergency_contact regexp '^[0-9]*$'),
 	
 	constraint empbase_fk1 foreign key(employee_id) references employee_main(employee_id),
 	constraint empbase_fk2 foreign key(employee_role) references job_titles(job_id),
 	constraint empbase_fk3 foreign key(location_id) references locations(location_id),
 	constraint empbase_fk4 foreign key(project) references projects(project_id),
-	constraint empbase_fk5 foreign key(added_by) references hr_managers(employee_id),
-	constraint empbase_fk6 foreign key(reporting_to) references reporting_managers(employee_id),
 	constraint empbase_fk7 foreign key(department_id) references departments(dpt_id)
-		
 );
 
+create table users(
+	user_id int primary key not null,
+    username varchar(200) not null,
+    password varchar(255) not null,
+    
+    constraint users_fk1 foreign key(user_id) references employee_base(employee_id)
+);
 
+create table user_roles(
+	id int primary key auto_increment,
+    user_id int not null,
+    role_id int not null,
+    
+    constraint user_roles_fk1 foreign key(user_id) references users(user_id),
+    constraint user_roles_fk2 foreign key(role_id) references roles(role_id),
+    constraint user_roles_unique unique(user_id, role_id)
+)

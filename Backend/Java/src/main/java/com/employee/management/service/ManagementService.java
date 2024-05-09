@@ -1,11 +1,10 @@
 package com.employee.management.service;
 
-import com.employee.management.entity.*;
+import com.employee.management.entity.DepartmentsEntity;
+import com.employee.management.entity.JobTitlesEntity;
+import com.employee.management.entity.LocationsEntity;
+import com.employee.management.entity.ProjectsEntity;
 import com.employee.management.exceptions.ServiceException;
-import com.employee.management.model.DepartmentsDetails;
-import com.employee.management.model.JobDetails;
-import com.employee.management.model.LocationDetails;
-import com.employee.management.model.ProjectDetails;
 import com.employee.management.repository.*;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -23,15 +22,6 @@ public class ManagementService {
     DepartmentsRepository departmentsRepository;
 
     @Autowired
-    EmployeeMainRepository employeeMainRepository;
-
-    @Autowired
-    HRManagersRepository hrManagersRepository;
-
-    @Autowired
-    ReportingManagersRepository reportingManagersRepository;
-
-    @Autowired
     LocationsRepository locationsRepository;
 
     @Autowired
@@ -44,7 +34,7 @@ public class ManagementService {
     EmployeeBaseRepository employeeBaseRepository;
 
     @SneakyThrows
-    public void saveDepartmentDetails(DepartmentsDetails departmentsDetails){
+    public void saveDepartmentDetails(DepartmentsEntity departmentsDetails){
         int departmentId = departmentsDetails.getDepartmentId();
         if(departmentId == 0) {
             Integer lastDepartmentId = departmentsRepository.getLastDepartmentId();
@@ -60,33 +50,7 @@ public class ManagementService {
     }
 
     @SneakyThrows
-    public void addNewHR(int employeeId){
-        EmployeeMainEntity employeeMainEntity = employeeMainRepository.findFirstByEmployeeId(employeeId);
-        HRManagersEntity hrManagersEntity = HRManagersEntity.builder()
-                .employeeId(employeeId)
-                .firstName(employeeMainEntity.getFirstName())
-                .middleName(employeeMainEntity.getMiddleName())
-                .lastName(employeeMainEntity.getLastName())
-                .build();
-        hrManagersRepository.save(hrManagersEntity);
-        log.info("ManagementService HR added successfully");
-    }
-
-    @SneakyThrows
-    public void addNewReportingManagers(int employeeId){
-        EmployeeMainEntity employeeMainEntity = employeeMainRepository.findFirstByEmployeeId(employeeId);
-        ReportingManagersEntity reportingManagersEntity = ReportingManagersEntity.builder()
-                .employeeId(employeeId)
-                .firstName(employeeMainEntity.getFirstName())
-                .middleName(employeeMainEntity.getMiddleName())
-                .lastName(employeeMainEntity.getLastName())
-                .build();
-        reportingManagersRepository.save(reportingManagersEntity);
-        log.info("ManagementService Reporting manager added successfully");
-    }
-
-    @SneakyThrows
-    public void saveLocationDetails(LocationDetails locationDetails){
+    public void saveLocationDetails(LocationsEntity locationDetails){
         int locationId = locationDetails.getLocationId();
         if(locationId == 0) {
             Integer lastLocationId = locationsRepository.getLastLocationId();
@@ -106,7 +70,7 @@ public class ManagementService {
     }
 
     @SneakyThrows
-    public void saveProjectDetails(ProjectDetails projectDetails){
+    public void saveProjectDetails(ProjectsEntity projectDetails){
         int projectId = projectDetails.getProjectId();
         if(projectId == 0){
             Integer lastProjectId = projectsRepository.getLastProjectId();
@@ -115,14 +79,13 @@ public class ManagementService {
         ProjectsEntity projectsEntity = ProjectsEntity.builder()
                 .projectId(projectId)
                 .projectTitle(projectDetails.getProjectTitle())
-                .client(projectDetails.getClient())
                 .build();
         projectsRepository.save(projectsEntity);
         log.info("ManagementService project details saved successfully");
     }
 
     @SneakyThrows
-    public void saveJobDetails(JobDetails jobDetails){
+    public void saveJobDetails(JobTitlesEntity jobDetails){
         int jobId = jobDetails.getJobId();
         if(jobId == 0){
             Integer lastJobId = jobTitlesRepository.getLastJobId();
@@ -134,21 +97,6 @@ public class ManagementService {
                 .build();
         jobTitlesRepository.save(jobTitlesEntity);
         log.info("ManagementService job details saved successfully");
-    }
-
-    public void removeReportingManager(int employeeId){
-        try {
-            reportingManagersRepository.deleteById(employeeId);
-        }catch (Exception e){
-            List<Integer> employeesReporting = employeeBaseRepository.getAllEmployeesReporting(employeeId);
-            throw new ServiceException("These employees still reporting to this manager employees "+employeesReporting);
-        }
-        log.info("Reporting manager removed successfully");
-    }
-
-    public void removeHrManager(int employeeId){
-        hrManagersRepository.deleteById(employeeId);
-        log.info("HR removed successfully");
     }
 
     public void removeProject(int projectId){

@@ -23,8 +23,6 @@ public class EmployeeBaseDetails implements Serializable {
 
     private Date dateOfBirth;
 
-    private int age;
-
     private String gender;
 
     @JsonProperty
@@ -68,6 +66,9 @@ public class EmployeeBaseDetails implements Serializable {
     private int reportingTo;
 
     private Long emergencyContact;
+
+    @JsonProperty
+    private Boolean isReportingManager;
 
     private EducationDetails educationDetails;
 }

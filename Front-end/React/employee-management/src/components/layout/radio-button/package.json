@@ -1,0 +1,31 @@
+{
+  "name": "remedy-radio-button",
+  "version": "1.0.0",
+  "description": "Button component using specifications from Remedy design system.",
+  "keywords": [
+    "button"
+  ],
+  "author": "Engineering <engineering@patientping.com>",
+  "homepage": "https://github.com/PatientPing/remedy#readme",
+  "license": "UNLICENSED",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PatientPing/remedy.git"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "~4.1.5"
+  },
+  "peerDependencies": {
+    "react": "~16.8.3",
+    "react-dom": "~16.8.3",
+    "@emotion/styled": "~10.0.0",
+    "remedy-theme": "^1.0.0"
+  },
+  "scripts": {
+    "build": "npm run compile",
+    "compile": "tsc -b . --force"
+  }
+}

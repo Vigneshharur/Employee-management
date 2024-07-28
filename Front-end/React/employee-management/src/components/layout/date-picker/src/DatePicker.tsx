@@ -8,7 +8,7 @@ import createAutoCorrectedDatePipe from 'text-mask-addons/dist/createAutoCorrect
 
 import Icon from '../../icon/lib';
 import Button, { StyleType } from '../../button/lib';
-import { boxShadow, colors, fontSize, sizes, zIndices } from '../../theme/lib';
+import { boxShadow, colors, fontSize, sizes, zIndices } from '../../theme';
 import { LabelTypography, SmallTypography, StandardSemiBoldTypography } from '../../typography/lib';
 
 const defaultMinTime = new Date();

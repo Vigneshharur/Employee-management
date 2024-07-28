@@ -1,0 +1,1 @@
+{"version":3,"file":"Typography.js","sourceRoot":"","sources":["../src/Typography.tsx"],"names":[],"mappings":";;;;AAAA,OAAO,OAAO,MAAM,eAAe,CAAC;AACpC,OAAO,EAAE,GAAG,EAAE,MAAM,eAAe,CAAC;AAEpC,OAAO,CAAC,IAAI,CAAC;IACX,MAAM,EAAE;QACN,QAAQ,EAAE,CAAC,gBAAgB,CAAC;KAC7B;CACF,CAAC,CAAC;AAEH,IAAM,WAAW,GAAG,GAAG,qHAAA,kDAEtB,IAAA,CAAC;AAEF,eAAe,WAAW,CAAC"}

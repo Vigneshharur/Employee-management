@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from '@emotion/styled';
-import '@emotion/core'
+import '@emotion/react'; // Ensure you're using the correct Emotion version
 import Select, {
   components,
-  Props,
-  Styles,
-  SelectComponentsConfig,
-  IndicatorProps,
-  Theme
+  Props as SelectProps,
+  StylesConfig,
+  GroupBase,
+  Theme,
+  // You can directly use the type for component props here
 } from 'react-select';
 import { colors, sizes, zIndices } from '../../theme/lib/';
 import { LabelTypography, SmallTypography, StandardSemiBoldTypography } from '../../typography/lib/';
@@ -21,7 +21,7 @@ export interface Value {
   value: string;
 }
 
-interface DropdownListProps extends Props {
+interface DropdownListProps extends SelectProps<Value, false, GroupBase<Value>> {
   className?: string;
   items: Value[] | [];
   value?: Value;
@@ -40,17 +40,13 @@ interface DropdownListProps extends Props {
   errorMessage?: string;
 }
 
-interface CustomStyle extends Styles<Value, false> {
-  theme?(base: Theme): Theme;
-}
-
 const Required = styled(StandardSemiBoldTypography)`
   color: ${colors.red2};
 `;
 
-const ErrorMessage = styled(SmallTypography)`
+const ErrorMessage = styled(SmallTypography)<{ error: boolean }>`
   display: block;
-  visibility: ${({ error }: { error: boolean }) => (error ? 'visible' : 'hidden')};
+  visibility: ${({ error }) => (error ? 'visible' : 'hidden')};
   margin: ${sizes.xxSmall} 0;
   color: ${colors.yellow3};
   svg {
@@ -59,7 +55,7 @@ const ErrorMessage = styled(SmallTypography)`
   }
 `;
 
-const CustomStyles: CustomStyle = {
+const CustomStyles: StylesConfig<Value, false, GroupBase<Value>> = {
   input: (provided) => ({
     ...provided,
     outline: 'none',
@@ -146,15 +142,16 @@ const CustomStyles: CustomStyle = {
   })
 };
 
-const ClearIndicator = (props: IndicatorProps<Value, false>) => {
+// Define the type for ClearIndicator props
+const ClearIndicator = (props: any) => {
   return (
-    <components.ClearIndicator {...props}>
-      <Icon iconClass="times" weight="fas" color={colors.cta} iconSize="1x" />
-    </components.ClearIndicator>
+      <components.ClearIndicator {...props}>
+        <Icon iconClass="times" weight="fas" color={colors.cta} iconSize="1x" />
+      </components.ClearIndicator>
   );
 };
 
-const CustomComponents: SelectComponentsConfig<Value, false> = {
+const CustomComponents = {
   DropdownIndicator: CustomIndicator,
   IndicatorSeparator: () => null,
   ClearIndicator,
@@ -163,52 +160,52 @@ const CustomComponents: SelectComponentsConfig<Value, false> = {
 };
 
 const DropdownList = ({
-  className = '',
-  items = [],
-  value,
-  handleChange,
-  placeholder = '',
-  label = '',
-  labelMessage = undefined,
-  id = `dropdown-${new Date().getTime()}`,
-  disabled = false,
-  isSearchable = true,
-  isClearable = false,
-  restrictedHeight = undefined,
-  required = false,
-  isWithinModal = false,
-  error = false,
-  errorMessage = '',
-  ...args
-}: DropdownListProps) => {
+                        className = '',
+                        items = [],
+                        value,
+                        handleChange,
+                        placeholder = '',
+                        label = '',
+                        labelMessage = undefined,
+                        id = `dropdown-${new Date().getTime()}`,
+                        disabled = false,
+                        isSearchable = true,
+                        isClearable = false,
+                        restrictedHeight = undefined,
+                        required = false,
+                        isWithinModal = false,
+                        error = false,
+                        errorMessage = '',
+                        ...args
+                      }: DropdownListProps) => {
   return (
-    <div className={className}>
-      {required && <Required>* </Required>}
-      <LabelTypography className={disabled ? 'disabled' : ''} htmlFor={id}>
-        {label} {labelMessage && <SmallTypography className="disabled">{labelMessage}</SmallTypography>}
-      </LabelTypography>
-      <Select
-        id={id}
-        options={items}
-        value={value}
-        restrictedHeight={restrictedHeight}
-        isSearchable={isSearchable}
-        isClearable={isClearable}
-        placeholder={placeholder}
-        onChange={handleChange}
-        isDisabled={disabled}
-        styles={CustomStyles}
-        components={CustomComponents}
-        menuPortalTarget={isWithinModal ? document.body : null}
-        menuShouldBlockScroll={isWithinModal}
-        error={error}
-        {...args}
-      />
-      <ErrorMessage error={error}>
-        <Icon iconClass="exclamation-triangle" color={colors.yellow2} iconSize="lg" weight="fas" />
-        {errorMessage}
-      </ErrorMessage>
-    </div>
+      <div className={className}>
+        {required && <Required>* </Required>}
+        <LabelTypography className={disabled ? 'disabled' : ''} htmlFor={id}>
+          {label} {labelMessage && <SmallTypography className="disabled">{labelMessage}</SmallTypography>}
+        </LabelTypography>
+        <Select
+            id={id}
+            options={items}
+            value={value}
+            restrictedHeight={restrictedHeight}
+            isSearchable={isSearchable}
+            isClearable={isClearable}
+            placeholder={placeholder}
+            onChange={handleChange}
+            isDisabled={disabled}
+            styles={CustomStyles}
+            components={CustomComponents}
+            menuPortalTarget={isWithinModal ? document.body : null}
+            menuShouldBlockScroll={isWithinModal}
+            error={error}
+            {...args}
+        />
+        <ErrorMessage error={error}>
+          <Icon iconClass="exclamation-triangle" color={colors.yellow2} iconSize="lg" weight="fas" />
+          {errorMessage}
+        </ErrorMessage>
+      </div>
   );
 };
 
